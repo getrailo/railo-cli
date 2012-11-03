@@ -31,7 +31,7 @@ detected.
 <!--
   <Set name="resourceBase"><SystemProperty name="jetty.home" default="."/>/webroot/</Set>
 -->
-	<Set name="resourceBase"><SystemProperty name="respath" default="./webroot/"/></Set>
+	<Set name="resourceBase"><SystemProperty name="railo.webroot" default="./webroot/"/></Set>
   
   <!-- <Set name="war"><SystemProperty name="jetty.home" default="."/>/webapps/test.war</Set> -->
 

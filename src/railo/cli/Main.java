@@ -16,7 +16,9 @@ public class Main {
 
 	public static void main(String[] args) throws Throwable {
 		File libDir=new File("./").getCanonicalFile();
-		System.out.println(libDir);
+		boolean isDebugMode=isDebugMode(args);
+		
+		if(isDebugMode)System.out.println(libDir);
 		
 		long start=System.currentTimeMillis();
 		
@@ -30,7 +32,7 @@ public class Main {
         //if(libDir.toString().equals("/Users/mic/Projects/Railo/Source2/Railo-CLI"))
 		//	libDir=new File("/Users/mic/temp/ext");
         
-        boolean isDebugMode=isDebugMode(args);
+       
         
         if(isDebugMode)System.out.println("Loading Jars from "+libDir);
         List<URL> urls=new ArrayList<URL>();
