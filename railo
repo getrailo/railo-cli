@@ -26,12 +26,13 @@ then
 		java -jar -DSTOP.PORT=8887 -DSTOP.KEY=railo lib/start.jar --stop	
 		
 	else
-		echo "Calling plugin $1"
+		#echo "Calling plugin $1"
 		cd $(dirname $0)
 		java -jar lib/ext/railo-cli.jar -webroot=./webroot/ -uri='/runner.cfm?currentpath='${CURRPATH}'&params='$PARAMS
 
 	fi
 else
+
 	cd $(dirname $0)
 	java -jar lib/ext/railo-cli.jar -webroot=./webroot/ -uri='/help.cfm'
 fi
