@@ -6,7 +6,9 @@ These are the cli scripts for Railo. They are the scripts to start and call rail
 
 Installation
 ============
-Basically this project should be extracted OVER a Railo Express version. The reason for this is that we don't want to include ALL the Railo JAR's and configs as well as the configuration for Jetty itself. 
+Basically this project should be extracted OVER a Railo Express version.
+
+The reason for this is that we don't want to include ALL the Railo JAR's and configs as well as the configuration for Jetty itself. 
 
  1. Download Railo Express from (http://www.getrailo.org/index.cfm/download/) and unzip somewhere (let's say /Applications/railo-cli for argument's sake)
  1. Download the zip of this project and unzip it somewhere
