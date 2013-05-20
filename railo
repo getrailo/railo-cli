@@ -17,7 +17,9 @@ then
 	elif [ "$1" == "start" ]
 	then
 		cd $(dirname $0)
-		java -jar -DSTOP.PORT=8887 -DSTOP.KEY=railo -Xms256M  -Xmx512M lib/start.jar -Drailo.webroot=$CURRPATH	--exec	
+		#export JAVA_OPTIONS="${JAVA_OPTIONS} -javaagent:lib/ext/railo-inst.jar"
+		java -jar -DSTOP.PORT=8887 -DSTOP.KEY=railo -Xms256M  -Xmx512M lib/start.jar -Drailo.webroot=$CURRPATH	 --exec	
+		
 		
 	elif [ "$1" == "stop" ]
 	then
