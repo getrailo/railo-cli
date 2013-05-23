@@ -47,7 +47,7 @@ public class Main {
         Method main = cli.getMethod("main",new Class[]{String[].class});
         main.invoke(null, new Object[]{args});
         
-        print.e("overall:"+(System.currentTimeMillis()-start));
+        //print.e("overall:"+(System.currentTimeMillis()-start));
 	}
 	
 
