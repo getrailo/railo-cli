@@ -10,15 +10,16 @@ if [ -n "$1" ]
 then
 	if [ "$1" == "run" ]
 	then
-#		echo $(dirname $0)/lib/ext/railo-cli.jar
+
 		cd $(dirname $0)
-		java -jar lib/ext/railo-cli.jar -webroot=$CURRPATH uri=$2?$3
+		java -jar webroot/WEB-INF/lib/railo-cli.jar -webroot=$CURRPATH uri=$2?$3
 		
 	elif [ "$1" == "start" ]
 	then
 		cd $(dirname $0)
 		#export JAVA_OPTIONS="${JAVA_OPTIONS} -javaagent:lib/ext/railo-inst.jar"
-		java -jar -DSTOP.PORT=8887 -DSTOP.KEY=railo -Xms256M  -Xmx512M lib/start.jar -Drailo.webroot=$CURRPATH	 --exec	
+		#java -jar -DSTOP.PORT=8887 -DSTOP.KEY=railo -Xms256M  -Xmx512M lib/start.jar -Drailo.webroot=$CURRPATH	 --exec
+		java -jar winstone.jar		
 		
 		
 	elif [ "$1" == "stop" ]
@@ -30,12 +31,11 @@ then
 	else
 		#echo "Calling plugin $1"
 		cd $(dirname $0)
-		java -jar lib/ext/railo-cli.jar -webroot=./webroot/ -uri='/runner.cfm?currentpath='${CURRPATH}'&params='$PARAMS
+		java -jar webroot/WEB-INF/lib/railo-cli.jar -webroot=./webroot/ -uri='/runner.cfm?currentpath='${CURRPATH}'&params='$PARAMS
 
 	fi
 else
 
 	cd $(dirname $0)
-	java -jar lib/ext/railo-cli.jar -webroot=./webroot/ -uri='/help.cfm'
+	java -jar webroot/WEB-INF/lib/railo-cli.jar -webroot=./webroot/ -uri='/help.cfm'
 fi
-#java -jar ./lib/ext/railo-cli.jar -webroot=./webroot/ -uri='/runner.cfm?currentpath='${CURRPATH}'&params='$PARAMS

@@ -1,24 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="project" default="default">
+<project name="railo-cli" default="default">
     <description>
-            description
+            Builds the CLI project into a runnable format
     </description>
-	<typedef name="railo" classname="railo.cli.RailoTask" classpath="bin" loaderref="bin"/>
 	
-    <!-- ================================= 
-          target: default              
-         ================================= -->
-    <target name="default" depends="depends" description="description">
-        
-    </target>
+	<property name="build.dir" location="./build/" />
+	<property name="build.libs" location="./libs/" />
+	<property name="libs.zipname"  value="railo-4.1.0.004.war" />
+	<property name="libs.zipfoldername"  value="railo-4.1.0.004.war" />
 
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: depends                      
-         - - - - - - - - - - - - - - - - - -->
-    <target name="depends">
-    	
-    	<railo webroot="webroot/" uri="test.cfm"/>
-    	
-    </target>
+	<property name="libs.url" value="http://www.getrailo.org/railo/remote/download/4.1.0.004/custom/all/${libs.zipname}"/>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		  <classpath>
+		    <pathelement location="libs/ant-contrib-1.0b3.jar"/>
+		  </classpath>
+	</taskdef>
 
+	
+	
+	<target name="default" depends="jar">
+		<!-- items in dist to the root -->
+		<copy todir="build/">
+			<fileset dir="dist">
+			</fileset>
+		</copy>
+		<copy todir="build/lib/" file="jars/javax.servlet.jsp-2.2.0.v201112011158.jar" />
+					
+		<copy tofile="build/railo.sh" file="railo" />
+		<copy todir="build/" file="railo.bat" />
+		<chmod perm="777" file="build/railo.sh" />
+		
+	</target>
+   
+	
+	
+	<target name="jar" depends="compile">
+		<jar basedir="${build.dir}/classes" destfile="${build.dir}/webroot/WEB-INF/lib/railo-cli.jar" manifest="src/META-INF/MANIFEST.MF" />
+		
+		<!-- cleanup -->
+		<delete  dir="${build.dir}/classes"/>
+	</target>
+	
+	<target name="compile" depends="lib-check">
+		<javac srcdir="src" destdir="${build.dir}/classes" >
+			 <classpath id="unzipped">
+			 	<fileset dir="libs/">
+				 	 <include name="**/*.jar"/>
+			 	</fileset>
+			</classpath>
+		 </javac>
+	</target>
+	
+	<target name="lib-check" depends="clean">
+		 <if>
+			<available file="libs/${libs.zipname}"/>
+			        <then>
+			        	<echo>Found WAR - Extracting...</echo>
+			        	<unzip src="libs/${libs.zipname}" dest="${build.dir}/webroot/" />
+			        </then>
+			        <else>
+			        	<echo>Download WAR  - Extrcting...</echo>
+			        	<get src="${libs.url}" dest="${build.dir}/webroot/" />
+			        	<unzip src="libs/${libs.zipname}" dest="libs/" />
+			        </else>
+			</if>
+	</target>
+	
+	
+   
+	<target name="clean">
+		
+		<if>
+			<available file="${build.dir}" type="dir" />
+			<then>
+				<echo>Found the directory, clear the contents</echo>
+				<delete includeemptydirs="true">
+				    <fileset dir="${build.dir}" includes="**/*"/>
+				 </delete>
+				<delete dir="${build.dir}/classes" includeemptydirs="true"/>
+				<delete dir="${build.dir}/lib" includeemptydirs="true"/>
+				<delete dir="${build.dir}/webroot" includeemptydirs="true"/>
+			</then>
+			<else>
+				<echo>No dir, create it</echo>
+				<mkdir dir="${build.dir}" />
+			</else>
+		</if>
+		
+		
+		<mkdir dir="${build.dir}/classes" />
+		<mkdir dir="${build.dir}/lib" />
+		<mkdir dir="${build.dir}/webroot" />
+		
+		
+		
+	</target>
+	   
 </project>
