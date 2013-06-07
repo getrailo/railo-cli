@@ -6,10 +6,10 @@
 	
 	<property name="build.dir" location="./build/" />
 	<property name="build.libs" location="./libs/" />
-	<property name="libs.zipname"  value="railo-4.1.0.004.war" />
-	<property name="libs.zipfoldername"  value="railo-4.1.0.004.war" />
-
-	<property name="libs.url" value="http://www.getrailo.org/railo/remote/download/4.1.0.004/custom/all/${libs.zipname}"/>
+	<property name="railo.version" value="4.1.0.004" />
+	<property name="libs.zipname"  value="railo-${railo.version}.war" />
+	<property name="libs.url" value="http://www.getrailo.org/railo/remote/download/${railo.version}/custom/all/${libs.zipname}"/>
+	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		  <classpath>
 		    <pathelement location="libs/ant-contrib-1.0b3.jar"/>
@@ -18,18 +18,34 @@
 
 	
 	
-	<target name="default" depends="jar">
+	<target name="default" depends="webroot">
+		
 		<!-- items in dist to the root -->
 		<copy todir="build/">
 			<fileset dir="dist">
 			</fileset>
 		</copy>
-		<copy todir="build/lib/" file="jars/javax.servlet.jsp-2.2.0.v201112011158.jar" />
+		<copy todir="build/lib/" file="libs/javax.servlet.jsp-2.2.0.v201112011158.jar" />
 					
-		<copy tofile="build/railo.sh" file="railo" />
-		<copy todir="build/" file="railo.bat" />
 		<chmod perm="777" file="build/railo.sh" />
 		
+	</target>
+	
+	<target name="webroot" depends="jar">
+		<!-- delete the current welcome to railo stuff -->
+		<delete dir="build/webroot">
+			<include name="Application.cfc"/>
+			<include name="index.cfm"/>
+		</delete>
+		<delete dir="build/webroot/res" />
+		
+		<!-- now copy the contents of the webroot -->
+			<copy todir="build/webroot" >
+				<fileset dir="webroot/">
+					<include name="*.cfm" />
+					<include name="*.cfc" />
+				</fileset>
+			</copy>
 	</target>
    
 	
@@ -53,23 +69,20 @@
 	
 	<target name="lib-check" depends="clean">
 		 <if>
-			<available file="libs/${libs.zipname}"/>
-			        <then>
-			        	<echo>Found WAR - Extracting...</echo>
-			        	<unzip src="libs/${libs.zipname}" dest="${build.dir}/webroot/" />
-			        </then>
-			        <else>
-			        	<echo>Download WAR  - Extrcting...</echo>
-			        	<get src="${libs.url}" dest="${build.dir}/libs/" />
-			        	<unzip src="libs/${libs.zipname}" dest="libs/" />
+			<available file="download/${libs.zipname}"/>
+			       <else>
+			        	<echo>Downloading WAR</echo>
+			        	<get src="${libs.url}" dest="download/" />
+			        	
 			        </else>
 			</if>
+    		<unzip src="download/${libs.zipname}" dest="${build.dir}/webroot/" />
+		
 	</target>
 	
 	
    
 	<target name="clean">
-		
 		<if>
 			<available file="${build.dir}" type="dir" />
 			<then>
@@ -84,6 +97,14 @@
 			<else>
 				<echo>No dir, create it</echo>
 				<mkdir dir="${build.dir}" />
+			</else>
+		</if>
+		
+		<!-- make sure the download folder exists -->
+		<if>
+			<available file="download/" type="dir" />
+			<else>
+				<mkdir dir="download/" />
 			</else>
 		</if>
 		
