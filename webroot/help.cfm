@@ -1,3 +1,4 @@
+<cferror template="/error.cfm" type="exception">
 <cfscript>
 	function filterListing(item){
 		if(ListLast(item, "/") EQ ".DS_Store"){

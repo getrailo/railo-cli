@@ -1,4 +1,5 @@
 <cfsetting enablecfoutputonly="true">
+<cferror template="error.cfm" type="exception">
 <cfscript>
 	param name="url.currentpath" default=expandPath(".");
 	param name="url.params" default="";	
