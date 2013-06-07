@@ -60,7 +60,7 @@
 			        </then>
 			        <else>
 			        	<echo>Download WAR  - Extrcting...</echo>
-			        	<get src="${libs.url}" dest="${build.dir}/webroot/" />
+			        	<get src="${libs.url}" dest="${build.dir}/libs/" />
 			        	<unzip src="libs/${libs.zipname}" dest="libs/" />
 			        </else>
 			</if>
