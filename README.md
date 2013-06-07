@@ -46,8 +46,8 @@ There are a few ways to run railo in the command line:
  1. #railo pluginname pluginaction# : This allows you to run the commands in a Railo CLI plugin. An example would be the as yet to be written Framework One plugin: #railo fw1 createApplication myApplication# which would create a skeleton FW1 application in the current folder, called myApplication.
 
 
-A word about CLI Plugins
+A word about CLI Modules
 ========================
-We are currently implementing the cli plugins and you can see the start of a plugin manager over at https://github.com/cybersonic/org.getrailo.cli.pm
+We are currently implementing the cli modules and you can see the start of a plugin manager over at https://github.com/cybersonic/org.getrailo.cli.pm
 
 
