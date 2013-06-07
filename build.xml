@@ -59,6 +59,8 @@
 					<fileset dir="dist">
 					</fileset>
 				</copy>
+				<copy file="build/railo.sh" tofile="build/railo"/>
+				<chmod perm="777" file="build/railo" />
 				<chmod perm="777" file="build/railo.sh" />
 				<copy todir="build/lib/" file="libs/javax.servlet.jsp-2.2.0.v201112011158.jar" />
 
@@ -102,7 +104,7 @@
 	</target>
 	
 	<target name="compile" depends="lib-check">
-		<javac srcdir="src" destdir="${build.dir}/classes" >
+		<javac srcdir="src" destdir="${build.dir}/classes" includeantruntime="true" >
 			 <classpath id="unzipped">
 			 	<fileset dir="libs/">
 				 	 <include name="**/*.jar"/>

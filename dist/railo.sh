@@ -19,7 +19,7 @@ then
 		cd $(dirname $0)
 		#export JAVA_OPTIONS="${JAVA_OPTIONS} -javaagent:lib/ext/railo-inst.jar"
 		#java -jar -DSTOP.PORT=8887 -DSTOP.KEY=railo -Xms256M  -Xmx512M lib/start.jar -Drailo.webroot=$CURRPATH	 --exec
-		java -jar winstone.jar		
+		java -jar winstone.jar --webroot=$CURRPATH
 		
 		
 	elif [ "$1" == "stop" ]
