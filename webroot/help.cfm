@@ -5,15 +5,18 @@
 		}
 		return true;
 	}
+	//We totally should have pm installed. It will be in there by default. 
 	
+	pm =  new modules.pm.cli.Main();
+
 </cfscript>
 RAILO COMMAND LINE PARAMETERS
 =============================
-  run
-  start
+ run
+ start
+ pm
 
-  Installed Plugins
-  -----------------
-  <cfloop array="#DirectoryList("plugins/", false, "name", filterListing)#" item="a"><cfoutput>#a#</cfoutput>
-  </cfloop>
+ Installed Plugins
+ -----------------
+ <cfoutput>#pm.installed([false])#</cfoutput>
 

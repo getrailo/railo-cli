@@ -13,7 +13,7 @@
 	method = isDefined("aParams[2]") ? aParams[2] : "help";
 
 	if(!ArrayLen(aParams)){
-		println("You need to call an extension. Available Extensions are:");
+		println("You need to call a module. Available modules are:");
 		extensionList();
 		exit;
 	}
@@ -38,14 +38,14 @@
 
 	
 	
-	if(!DirectoryExists(expandPath("/plugins/#cfc#"))){
-		println("Extension #cfc# doesn't exist. The currently installed extensions are:");
+	if(!DirectoryExists(expandPath("/modules/#cfc#"))){
+		println("Module #cfc# doesn't exist. The currently installed modules are:");
 		extensionList();
 		
 		exit;
 	}
 	
-	runnerCFC = CreateObject("component", "plugins.#cfc#.Main");
+	runnerCFC = CreateObject("component", "modules.#cfc#.cli.Main");
 
 	if(structKeyExists(runnerCFC, "init")){
 		runnerCFC.init(url.currentpath);
@@ -58,10 +58,15 @@
 	
 	
 	function extensionList(){
-		varDirs = DirectoryList(expandPath("/plugins/"), false, "name");
+		
+		//This should get the package manager and use that. 
+		
+		varDirs = DirectoryList(expandPath("/modules/"), false, "name");
 		for(dir in varDirs){
-			if(DirectoryExists(expandPath("/plugins/#dir#"))){
-				println(dir);				
+			if(DirectoryExists(expandPath("/modules/#dir#")) && FileExists(expandPath("/modules/#dir#/config.xml"))){
+				//Now read the config.xml
+				var config = XMLParse(FileRead(expandPath("/modules/#dir#/config.xml")));
+				println("#config.config.info.name.XMLText# - #config.config.info.label.XMLText# (v. #config.config.info.version.XMLText#) ");				
 			}
 		}
 	}

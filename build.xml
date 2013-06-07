@@ -16,18 +16,41 @@
 		  </classpath>
 	</taskdef>
 
+	<property name="railoshell" location="build/railo.sh" />
 	
-	
-	<target name="default" depends="webroot">
+	<target name="default" depends="root">
 		
+		
+		
+		
+	</target>
+	
+	<target name="tests" depends="root">
+	
+		<exec executable="${railoshell}">
+			<arg value="pm"/>
+			<arg value="installed" />
+		</exec>
+		
+		
+		<exec executable="${railoshell}" />
+				
+		<exec executable="${railoshell}">
+					<arg value="run"/>
+					<arg value="webroot/index.cfm" />
+		</exec>		
+	</target>
+	
+	
+	<target name="root" depends="webroot">
 		<!-- items in dist to the root -->
-		<copy todir="build/">
-			<fileset dir="dist">
-			</fileset>
-		</copy>
-		<copy todir="build/lib/" file="libs/javax.servlet.jsp-2.2.0.v201112011158.jar" />
-					
-		<chmod perm="777" file="build/railo.sh" />
+				<copy todir="build/">
+					<fileset dir="dist">
+					</fileset>
+				</copy>
+				<chmod perm="777" file="build/railo.sh" />
+				<copy todir="build/lib/" file="libs/javax.servlet.jsp-2.2.0.v201112011158.jar" />
+
 		
 	</target>
 	
@@ -45,6 +68,16 @@
 					<include name="*.cfm" />
 					<include name="*.cfc" />
 				</fileset>
+			</copy>
+		
+			<mkdir dir="build/webroot/modules" />
+			<mkdir dir="build/webroot/modules/pm" />
+		
+			<copy todir="build/webroot/modules/pm" > 
+			
+				<fileset dir="webroot/modules/pm">
+				</fileset>
+				
 			</copy>
 	</target>
    
