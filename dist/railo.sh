@@ -31,11 +31,11 @@ then
 	else
 		#echo "Calling plugin $1"
 		cd $(dirname $0)
-		java -jar webroot/WEB-INF/lib/railo-cli.jar -webroot=./webroot/ -uri='/runner.cfm?currentpath='${CURRPATH}'&params='$PARAMS
+		java -jar lib/railo-cli.jar -webroot=./webroot/ -uri='/runner.cfm?currentpath='${CURRPATH}'&params='$PARAMS
 
 	fi
 else
 
 	cd $(dirname $0)
-	java -jar webroot/WEB-INF/lib/railo-cli.jar -webroot=./webroot/ -uri='/help.cfm'
+	java -jar lib/railo-cli.jar -webroot=./webroot/ -uri='/help.cfm'
 fi

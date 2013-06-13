@@ -7,7 +7,9 @@
 	<property name="build.dir" location="./build/" />
 	<property name="build.libs" location="./libs/" />
 	<property name="railo.version" value="4.1.0.004" />
-	<property name="libs.zipname"  value="railo-${railo.version}.war" />
+	<property name="libs.zipname"  value="railo-${railo.version}-jars.zip" /> <!-- -jars.zip |  .war | -jars.tar.gz -->
+	<property name="libs.zipfolder" value="railo-${railo.version}-jars" />
+	
 	<property name="libs.url" value="http://www.getrailo.org/railo/remote/download/${railo.version}/custom/all/${libs.zipname}"/>
 	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -50,32 +52,38 @@
 	</target>
 	
 	<target name="startup" depends="root">
-		<java jar="build/winstone.jar" fork="true" dir="build/" />
+		<!--
+		/Users/markdrew/Dropbox/Projects/railo/railo-cli/dist/winstone-1.0.5-boot/META-INF/MANIFEST.MF
+		-->
 	</target>
 	
 	<target name="root" depends="webroot">
 		<!-- items in dist to the root -->
 				<copy todir="build/">
 					<fileset dir="dist">
+						<exclude name="winstone-1.0.5/"/>
+						<exclude name="winstone-1.0.5-boot/"/>
 					</fileset>
 				</copy>
 				<copy file="build/railo.sh" tofile="build/railo"/>
 				<chmod perm="777" file="build/railo" />
 				<chmod perm="777" file="build/railo.sh" />
-				<copy todir="build/lib/" file="libs/javax.servlet.jsp-2.2.0.v201112011158.jar" />
-
-		
 	</target>
 	
-	<target name="webroot" depends="jar">
-		<!-- delete the current welcome to railo stuff -->
+	
+	
+	
+	<target name="webroot" depends="jar,winstone-jar">
+		<!-- delete the current welcome to railo stuff 
 		<delete dir="build/webroot">
 			<include name="Application.cfc"/>
 			<include name="index.cfm"/>
 		</delete>
 		<delete dir="build/webroot/res" />
+		-->
 		
-		<!-- now copy the contents of the webroot -->
+		<!-- now copy the contents of the webroot
+		 -->
 			<copy todir="build/webroot" >
 				<fileset dir="webroot/">
 					<include name="*.cfm" />
@@ -87,17 +95,17 @@
 			<mkdir dir="build/webroot/modules/pm" />
 		
 			<copy todir="build/webroot/modules/pm" > 
-			
-				<fileset dir="webroot/modules/pm">
-				</fileset>
-				
+				<fileset dir="webroot/modules/pm" />
 			</copy>
 	</target>
    
-	
+	<target name="winstone-jar">
+		<jar basedir="dist/winstone-1.0.5-boot/lib/winstone-1.0.5" destfile="dist/winstone-1.0.5-boot/lib/winstone-1.0.5.jar" />
+		<jar basedir="dist/winstone-1.0.5-boot/" destfile="build/winstone.jar"  manifest="dist/winstone-1.0.5-boot/META-INF/MANIFEST.MF"/>
+	</target>
 	
 	<target name="jar" depends="compile">
-		<jar basedir="${build.dir}/classes" destfile="${build.dir}/webroot/WEB-INF/lib/railo-cli.jar" manifest="src/META-INF/MANIFEST.MF" />
+		<jar basedir="${build.dir}/classes" destfile="${build.dir}/lib/railo-cli.jar" manifest="src/META-INF/MANIFEST.MF" />
 		
 		<!-- cleanup -->
 		<delete  dir="${build.dir}/classes"/>
@@ -117,12 +125,25 @@
 		 <if>
 			<available file="download/${libs.zipname}"/>
 			       <else>
-			        	<echo>Downloading WAR</echo>
+			        	<echo>Downloading ${libs.zipname}</echo>
 			        	<get src="${libs.url}" dest="download/" />
 			        	
 			        </else>
 			</if>
-    		<unzip src="download/${libs.zipname}" dest="${build.dir}/webroot/" />
+    		<unzip src="download/${libs.zipname}" dest="${build.dir}/lib/" />
+			<!-- move them out of the folder -->
+			<move todir="${build.dir}/lib">
+				<fileset dir="${build.dir}/lib/${libs.zipfolder}">
+					<include name="*.jar" />
+				</fileset>
+			</move>
+			<delete dir="${build.dir}/lib/${libs.zipfolder}" /> 
+				
+		<!-- delete the slf binding -->
+		
+			<delete file="${build.dir}/lib/slf4j-log4j12-1.6.4.jar" />
+			<delete file="${build.dir}/lib/railo-sl4j.jar" />
+			<copy todir="build/lib/" file="libs/javax.servlet.jar" />
 		
 	</target>
 	
